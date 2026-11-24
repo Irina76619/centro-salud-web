@@ -1,12 +1,13 @@
 import { useEffect, useRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
+import { Link, type To } from 'react-router-dom';
 import { Loader2, X } from 'lucide-react';
 import type { EstadoCita } from '../api/types';
 
 // ---------- Botón ----------
 type Variante = 'primary' | 'secondary' | 'danger' | 'ghost';
 const VARIANTES: Record<Variante, string> = {
-  primary: 'bg-brand text-white hover:bg-brand-dark',
-  secondary: 'bg-paper text-ink border border-line hover:bg-canvas',
+  primary: 'bg-brand text-white shadow-sm hover:bg-brand-dark',
+  secondary: 'bg-paper text-ink border border-line shadow-sm hover:bg-canvas',
   danger: 'bg-cancel text-white hover:bg-[#7e2a33]',
   ghost: 'text-ink-soft hover:bg-brand-tint hover:text-brand-dark',
 };
@@ -17,19 +18,26 @@ interface BtnProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   pequeno?: boolean;
 }
 
+export function claseBoton(variante: Variante = 'primary', pequeno = false): string {
+  return `inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
+    pequeno ? 'px-2.5 py-1.5 text-[13px]' : 'px-4 py-2.5 text-sm'
+  } ${VARIANTES[variante]}`;
+}
+
 export function Button({ variante = 'primary', cargando, pequeno, className = '', children, disabled, ...rest }: BtnProps) {
   return (
-    <button
-      {...rest}
-      disabled={disabled || cargando}
-      className={`inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
-        pequeno ? 'px-2.5 py-1.5 text-[13px]' : 'px-4 py-2.5 text-sm'
-      } ${VARIANTES[variante]} ${className}`}
-    >
+    <button {...rest} disabled={disabled || cargando} className={`${claseBoton(variante, pequeno)} ${className}`}>
       {cargando && <Loader2 className="size-4 animate-spin" aria-hidden />}
       {children}
     </button>
   );
+}
+
+/** Enlace con apariencia de botón (navega sin recargar). */
+export function BotonLink({ to, state, variante = 'primary', pequeno, children }: {
+  to: To; state?: unknown; variante?: Variante; pequeno?: boolean; children: ReactNode;
+}) {
+  return <Link to={to} state={state} className={claseBoton(variante, pequeno)}>{children}</Link>;
 }
 
 // ---------- Campos de formulario ----------
@@ -65,7 +73,7 @@ export function Modal({ abierto, onCerrar, titulo, children, ancho = 'max-w-lg' 
       ref={ref}
       onClose={onCerrar}
       onClick={(e) => { if (e.target === ref.current) onCerrar(); }}
-      className={`m-auto w-[calc(100%-2rem)] ${ancho} rounded-2xl border border-line bg-paper p-0 text-ink shadow-2xl backdrop:bg-ink/45`}
+      className={`m-auto w-[calc(100%-2rem)] ${ancho} rounded-2xl border border-line bg-paper p-0 text-ink shadow-pop backdrop:bg-forest/55`}
     >
       {abierto && (
         <div className="max-h-[85vh] overflow-y-auto p-6">
@@ -108,7 +116,8 @@ export const COLOR_PUNTO: Record<EstadoCita, string> = { PENDIENTE: 'bg-pending'
 
 export function EstadoBadge({ estado }: { estado: EstadoCita }) {
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${ESTILO_ESTADO[estado]}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${ESTILO_ESTADO[estado]}`}>
+      <span className="size-1.5 rounded-full bg-current" aria-hidden />
       {TEXTO_ESTADO[estado]}
     </span>
   );
@@ -119,7 +128,7 @@ export function PageHeader({ titulo, subtitulo, acciones }: { titulo: string; su
   return (
     <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{titulo}</h1>
+        <h1 className="font-serif text-3xl font-semibold tracking-tight sm:text-4xl">{titulo}</h1>
         {subtitulo && <p className="mt-1 text-sm text-ink-soft">{subtitulo}</p>}
       </div>
       {acciones && <div className="flex flex-wrap items-center gap-2">{acciones}</div>}
@@ -128,7 +137,7 @@ export function PageHeader({ titulo, subtitulo, acciones }: { titulo: string; su
 }
 
 export function Panel({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <section className={`rounded-xl border border-line bg-paper ${className}`}>{children}</section>;
+  return <section className={`overflow-hidden rounded-2xl border border-line bg-paper shadow-card ${className}`}>{children}</section>;
 }
 
 export function Cargando({ texto = 'Cargando…' }: { texto?: string }) {
@@ -139,9 +148,10 @@ export function Cargando({ texto = 'Cargando…' }: { texto?: string }) {
   );
 }
 
-export function Vacio({ titulo, texto, accion }: { titulo: string; texto?: string; accion?: ReactNode }) {
+export function Vacio({ titulo, texto, accion, ilustracion }: { titulo: string; texto?: string; accion?: ReactNode; ilustracion?: ReactNode }) {
   return (
     <div className="px-6 py-14 text-center">
+      {ilustracion && <div className="mx-auto mb-4 w-44">{ilustracion}</div>}
       <p className="font-semibold">{titulo}</p>
       {texto && <p className="mx-auto mt-1 max-w-sm text-sm text-ink-soft">{texto}</p>}
       {accion && <div className="mt-4">{accion}</div>}

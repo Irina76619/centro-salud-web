@@ -1,4 +1,5 @@
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Pencil, Plus, Search, Trash2 } from 'lucide-react';
 import { api, ApiError, mensajeDeError } from '../api/client';
@@ -67,7 +68,13 @@ function armarPeticion(campos: CampoDef[], form: Record<string, string>) {
 export function CrudPage<T extends { id: number }>(p: Props<T>) {
   const qc = useQueryClient();
   const toast = useToast();
-  const [editando, setEditando] = useState<T | 'nuevo' | null>(null);
+  const ubicacion = useLocation();
+  const navegar = useNavigate();
+  // Si se llega desde un botón "Nueva ..." (state.nuevo), el formulario se abre de inmediato
+  const [editando, setEditando] = useState<T | 'nuevo' | null>(() => ((ubicacion.state as { nuevo?: boolean } | null)?.nuevo ? 'nuevo' : null));
+  useEffect(() => {
+    if ((ubicacion.state as { nuevo?: boolean } | null)?.nuevo) navegar(ubicacion.pathname, { replace: true, state: null });
+  }, [ubicacion.state, ubicacion.pathname, navegar]);
   const [eliminando, setEliminando] = useState<T | null>(null);
   const [texto, setTexto] = useState('');
 

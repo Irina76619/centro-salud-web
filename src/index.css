@@ -2,23 +2,31 @@
 
 @theme {
   --font-sans: "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* El serif se usa SOLO en titulares (login y títulos de página) */
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
 
-  --color-ink: #12303a;
-  --color-ink-soft: #46636d;
-  --color-ink-faint: #7b9199;
-  --color-canvas: #f1f6f6;
+  --color-ink: #10302b;
+  --color-ink-soft: #4a6a62;
+  --color-ink-faint: #556f68;
+  --color-canvas: #f3f7f6;
   --color-paper: #ffffff;
-  --color-line: #d8e3e4;
-  --color-brand: #0b7a75;
-  --color-brand-dark: #085e5a;
-  --color-brand-tint: #dff1ef;
-  --color-mint: #5fd0c5;
-  --color-pending: #ddcb0a;
-  --color-pending-tint: #fcefd6;
-  --color-ok: #0dbf66;
-  --color-ok-tint: #dcf1e4;
-  --color-cancel: #98353f;
-  --color-cancel-tint: #f7e2e4;
+  --color-line: #d9e5e1;
+
+  --color-forest: #0b3a32;
+  --color-brand: #0b6b5c;
+  --color-brand-dark: #07554a;
+  --color-brand-tint: #dcf0ea;
+  --color-mint: #5fd3b8;
+
+  --color-pending: #8a5200;
+  --color-pending-tint: #fbefd5;
+  --color-ok: #1d6a44;
+  --color-ok-tint: #dbf0e3;
+  --color-cancel: #9a343d;
+  --color-cancel-tint: #f7e1e3;
+
+  --shadow-card: 0 1px 2px rgb(16 48 43 / 0.05), 0 8px 20px -8px rgb(16 48 43 / 0.12);
+  --shadow-pop: 0 18px 44px -14px rgb(16 48 43 / 0.35);
 }
 
 @layer base {
@@ -30,21 +38,13 @@
   }
 }
 
-.fondo-cruces {
-  background-color: #12303a;
+/* Panel izquierdo del login: verde profundo con una cuadrícula muy sutil */
+.fondo-login {
+  background-color: #0b3a32;
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cpath transform='translate%2830 40%29 scale%281.0%29' d='M6 0h6v6h6v6h-6v6h-6v-6H0V6h6z' fill='white' fill-opacity='0.16'/%3E%3Cpath transform='translate%28150 25%29 scale%280.6%29' d='M6 0h6v6h6v6h-6v6h-6v-6H0V6h6z' fill='%235fd0c5' fill-opacity='0.4'/%3E%3Cpath transform='translate%28200 110%29 scale%280.5%29' d='M6 0h6v6h6v6h-6v6h-6v-6H0V6h6z' fill='white' fill-opacity='0.2'/%3E%3Cpath transform='translate%2890 150%29 scale%281.4%29' d='M6 0h6v6h6v6h-6v6h-6v-6H0V6h6z' fill='%235fd0c5' fill-opacity='0.18'/%3E%3Cpath transform='translate%2820 200%29 scale%280.7%29' d='M6 0h6v6h6v6h-6v6h-6v-6H0V6h6z' fill='white' fill-opacity='0.14'/%3E%3Cpath transform='translate%28170 200%29 scale%280.45%29' d='M6 0h6v6h6v6h-6v6h-6v-6H0V6h6z' fill='%235fd0c5' fill-opacity='0.45'/%3E%3Cpath transform='translate%28110 70%29 scale%280.4%29' d='M6 0h6v6h6v6h-6v6h-6v-6H0V6h6z' fill='white' fill-opacity='0.22'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360' viewBox='0 0 360 360'%3E%3Cpath transform='translate%2860 80%29 scale%282.2%29' d='M6 0h6v6h6v6h-6v6h-6v-6H0V6h6z' fill='white' fill-opacity='0.07'/%3E%3Cpath transform='translate%28250 200%29 scale%281.8%29' d='M6 0h6v6h6v6h-6v6h-6v-6H0V6h6z' fill='%235fd0c5' fill-opacity='0.12'/%3E%3Cpath transform='translate%28300 40%29 scale%280.8%29' d='M6 0h6v6h6v6h-6v6h-6v-6H0V6h6z' fill='white' fill-opacity='0.16'/%3E%3Cpath transform='translate%28120 300%29 scale%280.5%29' d='M6 0h6v6h6v6h-6v6h-6v-6H0V6h6z' fill='%235fd0c5' fill-opacity='0.34'/%3E%3Cpath transform='translate%2840 250%29 scale%280.6%29' d='M6 0h6v6h6v6h-6v6h-6v-6H0V6h6z' fill='white' fill-opacity='0.16'/%3E%3Cpath transform='translate%28320 310%29 scale%281.1%29' d='M6 0h6v6h6v6h-6v6h-6v-6H0V6h6z' fill='%235fd0c5' fill-opacity='0.18'/%3E%3C/svg%3E"),
-    radial-gradient(ellipse 70% 55% at 85% 12%, rgba(95, 208, 197, 0.22), transparent 70%),
-    linear-gradient(135deg, #0a232b 0%, #12303a 45%, #0b6460 100%);
-  background-size: 240px 240px, 360px 360px, auto, auto;
-  background-repeat: repeat, repeat, no-repeat, no-repeat;
-}
-
-/* Movimiento lento y suave; solo si la persona no pidió reducir animaciones */
-@media (prefers-reduced-motion: no-preference) {
-  .fondo-cruces { animation: deriva-cruces 120s linear infinite; }
-}
-@keyframes deriva-cruces {
-  to { background-position: 240px 240px, -360px 360px, 0 0, 0 0; }
+    linear-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    radial-gradient(ellipse 80% 55% at 15% 0%, rgb(95 211 184 / 0.20), transparent 65%),
+    linear-gradient(160deg, #0d4338 0%, #0a352d 55%, #072a24 100%);
+  background-size: 72px 72px, 72px 72px, auto, auto;
 }

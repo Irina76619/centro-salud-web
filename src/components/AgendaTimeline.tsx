@@ -3,6 +3,12 @@ import type { Cita } from '../api/types';
 import { hora } from '../lib/fechas';
 import { COLOR_PUNTO, EstadoBadge } from './ui';
 
+const BORDE: Record<Cita['estado'], string> = {
+  PENDIENTE: 'border-l-pending',
+  ATENDIDA: 'border-l-ok',
+  CANCELADA: 'border-l-cancel',
+};
+
 /**
  * La "agenda del día": cada cita sobre una línea de tiempo con la hora a la izquierda
  * y un punto de color según su estado.
@@ -22,7 +28,7 @@ export function AgendaTimeline({ citas, acciones, mostrarMedico = false }: {
             {i < citas.length - 1 && <span className="absolute bottom-0 top-[30px] w-px bg-line" />}
           </div>
           <div className="pb-3">
-            <div className={`flex flex-wrap items-start justify-between gap-3 rounded-xl border border-line px-4 py-3 ${c.estado === 'CANCELADA' ? 'bg-canvas/70' : 'bg-paper'}`}>
+            <div className={`flex flex-wrap items-start justify-between gap-3 rounded-xl border border-l-4 border-line px-4 py-3 shadow-card ${BORDE[c.estado]} ${c.estado === 'CANCELADA' ? 'bg-canvas/70' : 'bg-paper'}`}>
               <div className="min-w-0">
                 <p className={`font-semibold ${c.estado === 'CANCELADA' ? 'text-ink-soft line-through' : ''}`}>{c.paciente}</p>
                 <p className="text-sm text-ink-soft">{c.motivo}</p>

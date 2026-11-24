@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { NavLink, Navigate, Outlet } from 'react-router-dom';
 import {
   CalendarClock, CalendarDays, ClipboardList, LayoutDashboard, LogOut, Menu, Stethoscope,
-  UserRound, Users, X, BarChart3, Tags, type LucideIcon,
+  Users, X, BarChart3, Tags, type LucideIcon,
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import type { Rol } from '../api/types';
@@ -31,12 +31,16 @@ export function Marca({ claro = true }: { claro?: boolean }) {
   return (
     <div className="flex items-center gap-2.5">
       <svg viewBox="0 0 32 32" className="size-8" aria-hidden>
-        <rect width="32" height="32" rx="8" fill={claro ? '#1d4753' : '#12303a'} />
-        <path d="M13 7h6v6h6v6h-6v6h-6v-6H7v-6h6z" fill="#5fd0c5" />
+        <rect width="32" height="32" rx="8" fill={claro ? '#14574c' : '#0b3a32'} />
+        <path d="M13 7h6v6h6v6h-6v6h-6v-6H7v-6h6z" fill="#5fd3b8" />
       </svg>
       <span className={`text-[15px] font-extrabold tracking-tight ${claro ? 'text-white' : 'text-ink'}`}>Centro de Salud</span>
     </div>
   );
+}
+
+function iniciales(nombre: string): string {
+  return nombre.split(' ').filter(Boolean).slice(0, 2).map((p) => p[0].toUpperCase()).join('');
 }
 
 /** Estructura común: barra lateral según el rol + contenido. Protege la ruta por rol. */
@@ -48,7 +52,7 @@ export function AppLayout({ rol }: { rol: Rol }) {
   if (sesion.rol !== rol) return <Navigate to={sesion.rol === 'ADMIN' ? '/admin' : '/medico'} replace />;
 
   const barra = (
-    <nav aria-label="Principal" className="flex h-full flex-col bg-ink px-3 py-5 text-white">
+    <nav aria-label="Principal" className="flex h-full flex-col bg-forest px-3 py-5 text-white">
       <div className="px-2 pb-6"><Marca /></div>
       <ul className="flex flex-1 flex-col gap-1">
         {MENU[rol].map(({ a, texto, icono: Icono, fin }) => (
@@ -58,8 +62,10 @@ export function AppLayout({ rol }: { rol: Rol }) {
               end={fin}
               onClick={() => setAbierto(false)}
               className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors ${
-                  isActive ? 'bg-white/12 text-white' : 'text-white/65 hover:bg-white/8 hover:text-white'
+                `relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors ${
+                  isActive
+                    ? 'bg-white/10 text-white before:absolute before:-left-3 before:bottom-2 before:top-2 before:w-1 before:rounded-r-full before:bg-mint'
+                    : 'text-white/70 hover:bg-white/8 hover:text-white'
                 }`
               }
             >
@@ -68,17 +74,19 @@ export function AppLayout({ rol }: { rol: Rol }) {
           </li>
         ))}
       </ul>
-      <div className="mt-4 border-t border-white/12 pt-4">
-        <div className="flex items-center gap-3 px-2">
-          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/12"><UserRound className="size-4" aria-hidden /></span>
+      <div className="mt-4 space-y-2 pt-2">
+        <div className="flex items-center gap-3 rounded-xl bg-brand-tint px-3 py-3 text-forest">
+          <span className="grid size-9 shrink-0 place-items-center rounded-full bg-forest text-xs font-bold text-white" aria-hidden>
+            {iniciales(sesion.nombre)}
+          </span>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold">{sesion.nombre}</p>
-            <p className="text-xs text-white/60">{rol === 'ADMIN' ? 'Administrativo' : 'Médico'}</p>
+            <p className="truncate text-sm font-bold">{sesion.nombre}</p>
+            <p className="text-xs font-semibold text-brand-dark">{rol === 'ADMIN' ? 'Administrativo' : 'Médico'}</p>
           </div>
         </div>
         <button
           onClick={logout}
-          className="mt-3 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-white/65 transition-colors hover:bg-white/8 hover:text-white"
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-white/70 transition-colors hover:bg-white/8 hover:text-white"
         >
           <LogOut className="size-[18px]" aria-hidden /> Cerrar sesión
         </button>
@@ -92,7 +100,7 @@ export function AppLayout({ rol }: { rol: Rol }) {
       <aside className="sticky top-0 hidden h-screen lg:block">{barra}</aside>
 
       {/* Móvil */}
-      <div className="sticky top-0 z-30 flex items-center justify-between bg-ink px-4 py-3 lg:hidden">
+      <div className="sticky top-0 z-30 flex items-center justify-between bg-forest px-4 py-3 lg:hidden">
         <Marca />
         <button onClick={() => setAbierto(true)} aria-label="Abrir menú" className="rounded-lg p-2 text-white hover:bg-white/10">
           <Menu className="size-5" />
@@ -100,7 +108,7 @@ export function AppLayout({ rol }: { rol: Rol }) {
       </div>
       {abierto && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="absolute inset-0 bg-ink/50" onClick={() => setAbierto(false)} />
+          <div className="absolute inset-0 bg-forest/60" onClick={() => setAbierto(false)} />
           <aside className="absolute inset-y-0 left-0 w-[260px]">
             {barra}
             <button onClick={() => setAbierto(false)} aria-label="Cerrar menú" className="absolute right-3 top-4 rounded-lg p-2 text-white/80 hover:bg-white/10">

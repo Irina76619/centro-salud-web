@@ -71,7 +71,7 @@ function csvCitas(nombre: string, citas: GrupoCitas['citas']) {
   ]);
 }
 
-const ejes = { tickLine: false, axisLine: false, tick: { fontSize: 12, fill: '#46636d' } } as const;
+const ejes = { tickLine: false, axisLine: false, tick: { fontSize: 12, fill: '#4a6a62' } } as const;
 
 // ---------- Por médico / por especialidad ----------
 function Grupos({ ruta, nombre, etiquetaGrupo }: { ruta: string; nombre: string; etiquetaGrupo: string }) {
@@ -92,11 +92,11 @@ function Grupos({ ruta, nombre, etiquetaGrupo }: { ruta: string; nombre: string;
             <div className="w-full" style={{ height: Math.max(160, grupos.length * 44) }} role="img" aria-label={`Gráfico de citas por ${etiquetaGrupo.toLowerCase()}`}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={grupos} layout="vertical" margin={{ top: 0, right: 16, left: 8, bottom: 0 }}>
-                  <CartesianGrid horizontal={false} stroke="#d8e3e4" />
+                  <CartesianGrid horizontal={false} stroke="#d9e5e1" />
                   <XAxis type="number" allowDecimals={false} {...ejes} />
                   <YAxis type="category" dataKey="grupo" width={170} {...ejes} />
-                  <Tooltip cursor={{ fill: '#dff1ef' }} formatter={(v) => [v, 'Citas']} />
-                  <Bar dataKey="total" fill="#0b7a75" radius={[0, 4, 4, 0]} barSize={20} />
+                  <Tooltip cursor={{ fill: '#dcf0ea' }} formatter={(v) => [v, 'Citas']} />
+                  <Bar dataKey="total" fill="#0b6b5c" radius={[0, 4, 4, 0]} barSize={20} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -219,11 +219,11 @@ function PorMes() {
               <div className="h-56" role="img" aria-label={`Gráfico de citas por mes en ${anio}`}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={datos} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
-                    <CartesianGrid vertical={false} stroke="#d8e3e4" />
+                    <CartesianGrid vertical={false} stroke="#d9e5e1" />
                     <XAxis dataKey="etiqueta" {...ejes} />
                     <YAxis allowDecimals={false} {...ejes} />
-                    <Tooltip cursor={{ fill: '#dff1ef' }} formatter={(v) => [v, 'Citas']} />
-                    <Bar dataKey="total" fill="#0b7a75" radius={[4, 4, 0, 0]} />
+                    <Tooltip cursor={{ fill: '#dcf0ea' }} formatter={(v) => [v, 'Citas']} />
+                    <Bar dataKey="total" fill="#0b6b5c" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

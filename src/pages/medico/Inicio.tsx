@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { ClipboardCheck } from 'lucide-react';
+import { CalendarDays, CheckCircle2, ClipboardCheck, Clock } from 'lucide-react';
 import { api, mensajeDeError } from '../../api/client';
 import type { Cita } from '../../api/types';
 import { useAuth } from '../../auth/AuthContext';
 import { AgendaTimeline } from '../../components/AgendaTimeline';
 import { AtenderModal } from '../../components/AtenderModal';
+import { IlustracionAgenda } from '../../components/Ilustracion';
+import { StatTile } from '../../components/StatTile';
 import { Button, Cargando, ErrorCaja, PageHeader, Panel, Vacio } from '../../components/ui';
 import { fechaHora, hoyISO, hoyLargo } from '../../lib/fechas';
 
@@ -29,26 +31,20 @@ export default function Inicio() {
       <PageHeader titulo="Agenda de hoy" subtitulo={`${hoyLargo()} · ${sesion?.detalle ?? ''}`} />
 
       {todas.data && (
-        <Panel className="mb-6 grid grid-cols-3 divide-x divide-line">
-          {[
-            { t: 'Citas hoy', v: hoy.data?.length ?? 0 },
-            { t: 'Pendientes', v: conteo('PENDIENTE') },
-            { t: 'Atendidas', v: conteo('ATENDIDA') },
-          ].map((x) => (
-            <div key={x.t} className="px-5 py-4">
-              <p className="text-sm text-ink-soft">{x.t}</p>
-              <p className="mt-1 text-3xl font-extrabold tabular-nums">{x.v}</p>
-            </div>
-          ))}
-        </Panel>
+        <div className="mb-6 grid grid-cols-3 gap-4">
+          <StatTile titulo="Citas hoy" valor={hoy.data?.length ?? 0} detalle={hoy.data?.length ? 'En tu agenda' : 'Sin citas'} icono={CalendarDays} />
+          <StatTile titulo="Pendientes" valor={conteo('PENDIENTE')} detalle="Por atender" icono={Clock} acento />
+          <StatTile titulo="Atendidas" valor={conteo('ATENDIDA')} detalle="En total" icono={CheckCircle2} />
+        </div>
       )}
 
-      <Panel className="p-5">
+      <Panel className="p-6">
         <h2 className="mb-4 text-lg font-bold">Citas de hoy</h2>
         {hoy.isPending ? <Cargando /> : hoy.isError ? (
           <ErrorCaja mensaje={mensajeDeError(hoy.error)} onReintentar={() => hoy.refetch()} />
         ) : hoy.data.length === 0 ? (
           <Vacio
+            ilustracion={<IlustracionAgenda />}
             titulo="No tienes citas para hoy"
             texto="Revisa abajo las citas pendientes de otros días o consulta tu agenda completa."
             accion={<Link to="/medico/citas" className="text-sm font-semibold text-brand underline underline-offset-2">Ver todas mis citas</Link>}
@@ -59,7 +55,7 @@ export default function Inicio() {
       </Panel>
 
       {pendientesOtros.length > 0 && (
-        <Panel className="mt-6 p-5">
+        <Panel className="mt-6 p-6">
           <h2 className="mb-1 text-lg font-bold">Pendientes por atender</h2>
           <p className="mb-3 text-sm text-ink-soft">Citas de otros días que aún no se cierran.</p>
           <ul className="divide-y divide-line">
