@@ -5,6 +5,7 @@ import {
   Users, X, BarChart3, Tags, type LucideIcon,
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
+import { Logo } from './Logo';
 import type { Rol } from '../api/types';
 
 interface Item { a: string; texto: string; icono: LucideIcon; fin?: boolean }
@@ -30,11 +31,10 @@ const MENU: Record<Rol, Item[]> = {
 export function Marca({ claro = true }: { claro?: boolean }) {
   return (
     <div className="flex items-center gap-2.5">
-      <svg viewBox="0 0 32 32" className="size-8" aria-hidden>
-        <rect width="32" height="32" rx="8" fill={claro ? '#14574c' : '#0b3a32'} />
-        <path d="M13 7h6v6h6v6h-6v6h-6v-6H7v-6h6z" fill="#5fd3b8" />
-      </svg>
-      <span className={`text-[15px] font-extrabold tracking-tight ${claro ? 'text-white' : 'text-ink'}`}>Centro de Salud</span>
+      <Logo className={`size-10 shrink-0 ${claro ? 'text-mint' : 'text-forest'}`} />
+      <span className={`text-[15px] font-extrabold leading-[1.05] tracking-tight ${claro ? 'text-white' : 'text-forest'}`}>
+        Centro<br />de Salud
+      </span>
     </div>
   );
 }

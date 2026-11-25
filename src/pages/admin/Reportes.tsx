@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Download } from 'lucide-react';
 import { api, mensajeDeError } from '../../api/client';
 import type { Conteo, GrupoCitas, HistorialDetalle, Paciente, ReporteCitas } from '../../api/types';
@@ -91,13 +91,21 @@ function Grupos({ ruta, nombre, etiquetaGrupo }: { ruta: string; nombre: string;
             </div>
             <div className="w-full" style={{ height: Math.max(160, grupos.length * 44) }} role="img" aria-label={`Gráfico de citas por ${etiquetaGrupo.toLowerCase()}`}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={grupos} layout="vertical" margin={{ top: 0, right: 16, left: 8, bottom: 0 }}>
-                  <CartesianGrid horizontal={false} stroke="#d9e5e1" />
-                  <XAxis type="number" allowDecimals={false} {...ejes} />
-                  <YAxis type="category" dataKey="grupo" width={170} {...ejes} />
-                  <Tooltip cursor={{ fill: '#dcf0ea' }} formatter={(v) => [v, 'Citas']} />
-                  <Bar dataKey="total" fill="#0b6b5c" radius={[0, 4, 4, 0]} barSize={20} />
-                </BarChart>
+                <BarChart data={grupos} layout="vertical" margin={{ top: 0, right: 32, left: 8, bottom: 0 }}>
+  <defs>
+    <linearGradient id="barra-horizontal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stopColor="#07554a" />
+      <stop offset="100%" stopColor="#12907a" />
+    </linearGradient>
+  </defs>
+  <CartesianGrid horizontal={false} stroke="#d9e5e1" />
+  <XAxis type="number" allowDecimals={false} {...ejes} />
+  <YAxis type="category" dataKey="grupo" width={170} {...ejes} />
+  <Tooltip cursor={{ fill: '#dcf0ea' }} formatter={(v) => [v, 'Citas']} />
+  <Bar dataKey="total" fill="url(#barra-horizontal)" radius={[0, 8, 8, 0]} barSize={22}>
+    <LabelList dataKey="total" position="right" style={{ fontSize: 12, fontWeight: 700, fill: '#10302b' }} />
+  </Bar>
+</BarChart>
               </ResponsiveContainer>
             </div>
           </Panel>
@@ -218,13 +226,26 @@ function PorMes() {
             {(datos) => (
               <div className="h-56" role="img" aria-label={`Gráfico de citas por mes en ${anio}`}>
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={datos} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
-                    <CartesianGrid vertical={false} stroke="#d9e5e1" />
-                    <XAxis dataKey="etiqueta" {...ejes} />
-                    <YAxis allowDecimals={false} {...ejes} />
-                    <Tooltip cursor={{ fill: '#dcf0ea' }} formatter={(v) => [v, 'Citas']} />
-                    <Bar dataKey="total" fill="#0b6b5c" radius={[4, 4, 0, 0]} />
-                  </BarChart>
+                 <BarChart data={datos} margin={{ top: 18, right: 4, left: -24, bottom: 0 }}>
+  <defs>
+    <linearGradient id="barra-vertical" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor="#12907a" />
+      <stop offset="100%" stopColor="#07554a" />
+    </linearGradient>
+  </defs>
+  <CartesianGrid vertical={false} stroke="#d9e5e1" />
+  <XAxis dataKey="etiqueta" {...ejes} />
+  <YAxis allowDecimals={false} {...ejes} />
+  <Tooltip cursor={{ fill: '#dcf0ea' }} formatter={(v) => [v, 'Citas']} />
+  <Bar dataKey="total" fill="url(#barra-vertical)" radius={[6, 6, 0, 0]} maxBarSize={28}>
+    <LabelList
+      dataKey="total"
+      position="top"
+      formatter={(v: unknown) => (Number(v) > 0 ? String(v) : '')}
+      style={{ fontSize: 12, fontWeight: 700, fill: '#10302b' }}
+    />
+  </Bar>
+</BarChart>
                 </ResponsiveContainer>
               </div>
             )}
